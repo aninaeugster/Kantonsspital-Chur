@@ -69,7 +69,6 @@ if(isset($_POST["login-submit"])){
 ?>
 
 
-
 <!-- HTML-Code -->
 <!DOCTYPE html>
 <html lang="en">
@@ -81,7 +80,7 @@ if(isset($_POST["login-submit"])){
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Kantonsspital Chur - Login</title>
+    <title>Kantonsspital Graubünden - Login</title>
 
     <!-- Bootstrap core CSS -->
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
@@ -99,7 +98,7 @@ if(isset($_POST["login-submit"])){
   					<div class="panel-heading">
   						<div class="row">
   							<div class="col-xs-12">
-    							<h3>Kantonsspital Chur</h3>
+    							<h3>Kantonsspital Graubünden</h3>
   							</div>
   						</div>
 
@@ -149,6 +148,57 @@ if(isset($_POST["login-submit"])){
   									<div class="form-group">
   										<input type="password" name="confirm-password" id="confirm-password" tabindex="2" class="form-control" placeholder="Passwort bestätigen">
   									</div>
+                    <!-- Checkboxen Interessen -->
+                    <!-- Checkbox Interesse 1-->
+                    <label class="custom-control custom-checkbox">
+                      <input type="checkbox" class="custom-control-input" value="future">
+                        <span class="custom-control-indicator"></span>
+                        <span class="custom-control-description">Zukunft</span>
+                    </label>
+                  </br>
+                    <!-- Checkbox Interesse 2 -->
+                    <label class="custom-control custom-checkbox">
+                      <input type="checkbox" class="custom-control-input" value="events">
+                        <span class="custom-control-indicator"></span>
+                        <span class="custom-control-description">Veranstaltungen</span>
+                    </label>
+                  </br>
+                    <!-- Checkbox Interesse 3 -->
+                    <label class="custom-control custom-checkbox">
+                      <input type="checkbox" class="custom-control-input" value="history">
+                        <span class="custom-control-indicator"></span>
+                        <span class="custom-control-description">Geschichte</span>
+                    </label>
+                  </br>
+                    <!-- Chechbox Interesse 4 -->
+                    <label class="custom-control custom-checkbox">
+                      <input type="checkbox" class="custom-control-input" value="news">
+                        <span class="custom-control-indicator"></span>
+                        <span class="custom-control-description">News</span>
+                    </label>
+                  </br>
+                    <!-- Chechbox Interesse 5 -->
+                    <label class="custom-control custom-checkbox">
+                      <input type="checkbox" class="custom-control-input" value="projectsun">
+                        <span class="custom-control-indicator"></span>
+                        <span class="custom-control-description">Bauprojekt SUN</span>
+                    </label>
+                  </br>
+                    <!-- Chechbox Interesse 6 -->
+                    <label class="custom-control custom-checkbox">
+                      <input type="checkbox" class="custom-control-input" value="projectkidsstation">
+                        <span class="custom-control-indicator"></span>
+                        <span class="custom-control-description">Bauprojekt Kinderstation</span>
+                    </label>
+                  </br>
+                    <!-- Checkbox Interesse 7 -->
+                    <label class="custom-control custom-checkbox">
+                      <input type="checkbox" class="custom-control-input" value="doctor">
+                        <span class="custom-control-indicator"></span>
+                        <span class="custom-control-description">Eine Ärztin erzählt</span>
+                    </label>
+
+                    <!-- Button registrieren -->
   									<div class="form-group">
   										<div class="row">
   											<div class="col-sm-6 col-sm-offset-3">
@@ -156,6 +206,7 @@ if(isset($_POST["login-submit"])){
   											</div>
   										</div>
   									</div>
+                  </div>
   								</form>
                   <div class="row">
                     <div class="col-xs-6">
@@ -173,10 +224,9 @@ if(isset($_POST["login-submit"])){
   					</div>
   				</div>
   			</div>
-  		</div>
 
 
-<!-- Die beiden BS-Alert-Boxen geben Rückmeldung über den Registrierungsprozess. Sie werden erst später benötigt. -->
+<!-- Rückmeldung Registrierungs- / Loginprozess -->
       <?php if($success == true){ ?>
             <div class="alert alert-success" role="alert"><?php echo $success_msg; ?></div>
       <?php } ?>
