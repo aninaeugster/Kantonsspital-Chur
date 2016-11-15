@@ -1,3 +1,73 @@
+<?php
+session_start();
+  if(isset($_SESSION["id"]))  unset($_SESSION["id"]);
+    session_destroy();
+
+    require_once("data.php");
+    require_once("security.php");
+
+$error = false;
+$error_msg = "";
+$success = false;
+$success_msg = "";
+
+
+if(isset($_POST["login-submit"])){
+  if(!empty($_POST["email"]) && !empty($_POST["password"])) {
+    $email = filter_data($_POST["email"]);
+    $password = filter_data($_POST["password"]);
+
+    $result = login($email, $password);
+
+    $row_count = mysqli_num_rows($result);
+
+  if($row_count == 1) {
+    $user = mysqli_fetch_assoc($result);
+    session_start();
+    $_SESSION["id"] = $user["user_id"];
+    header("Location:home.php");
+  }
+    else {
+      $error = true;
+      $error_msg .= "E-Mail und Passwort sind falsch. Bitte versuche es nochmals.</br>";
+      }
+}   else {
+    $error = true;
+    $error_msg .= "Bitte fülle beide Felder aus.</br>";
+  }
+}
+
+  if(isset($_POST["register-submit"])){
+    if(!empty($_POST["firstname"]) && !empty($_POST["lastname"]) && !empty($_POST["email"]) && !empty($_POST["password"]) && !empty($_POST["confirm-password"])){
+      $firstname = filter_data($_POST["firstname"]);
+      $lastname = filter_data($_POST["lastname"]);
+      $email = filter_data($_POST["email"]);
+      $password = filter_data($_POST["password"]);
+      $confirm_password = filter_data($_POST["confirm-password"]);
+    if ($password == $confirm_password){
+        $db = get_db_connection();
+      $sql = "INSERT INTO user (firstname, lastname, email, password) VALUES ('$firstname', '$lastname', '$email', '$password');";
+        echo $sql;
+    if(mysqli_query($db, $sql)){
+        $success = true;
+        $success_msg = "Du hast dich erfolgreich registriert.</br>";
+        $success_msg = "Bitte logge dich jetzt ein.</br>";
+      }else {
+        $error = true;
+        $error_msg .= "</br>";
+            }
+      mysqli_close($db);
+    }else{
+      $error = true;
+      $error_msg .= "Bitte überprüfen Sie ihre Passworteingabe.</br>";
+    }
+    }else {
+        $error = true;
+        $error_msg .= "Bitte füllen Sie beide Felder aus.</br>";
+      }
+  }
+?>
+
 
 
 <!-- HTML-Code -->
@@ -51,7 +121,7 @@
   									<div class="form-group">
   										<div class="row">
   											<div class="col-sm-6 col-sm-offset-3">
-  												<input type="submit" name="login-submit" id="login-submit" tabindex="4" class="form-control btn btn-login" value="einloggen">
+  												<input type="submit" name="login-submit" id="login-submit" tabindex="4" class="form-control btn btn-login" value="Login">
   											</div>
   										</div>
   									</div>
@@ -69,7 +139,7 @@
                         <input type="text" name="lastname" id="lastname" tabindex="2" class="form-control" placeholder="Nachname">
                       </div>
                       <!-- Feld 3 - Emailadresse -->
-  										<input type="email" name="email" id="email" tabindex="1" class="form-control" placeholder="E-Mail-Adresse" value="">
+  										<input type="email" name="email" id="email" tabindex="2" class="form-control" placeholder="E-Mail-Adresse" value="">
   									</div>
                     <!-- Feld 4 - Passwort -->
   									<div class="form-group">
@@ -82,7 +152,7 @@
   									<div class="form-group">
   										<div class="row">
   											<div class="col-sm-6 col-sm-offset-3">
-  												<input type="submit" name="register-submit" id="register-submit" tabindex="4" class="form-control btn btn-register" value="jetzt registrieren">
+  												<input type="submit" name="register-submit" id="register-submit" tabindex="3" class="form-control btn btn-register" value="Jetzt registrieren">
   											</div>
   										</div>
   									</div>
