@@ -11,16 +11,16 @@ $error_msg = "";
 $success = false;
 $success_msg = "";
 
+$db = get_db_connection();
 
-if(isset($_POST["login-submit"])){
-  if(!empty($_POST["email"]) && !empty($_POST["password"])) {
-    $email = filter_data($_POST["email"]);
-    $password = filter_data($_POST["password"]);
+  if(isset($_POST["login-submit"])){
+    if(!empty($_POST["email"]) && !empty($_POST["password"])) {
+      $email = filter_data($_POST["email"]);
+      $password = filter_data($_POST["password"]);
 
-    $result = login($email, $password);
+  $result = login($email, $password);
 
-    $row_count = mysqli_num_rows($result);
-
+  $row_count = mysqli_num_rows($result);
   if($row_count == 1) {
     $user = mysqli_fetch_assoc($result);
     session_start();
@@ -44,14 +44,22 @@ if(isset($_POST["login-submit"])){
       $email = filter_data($_POST["email"]);
       $password = filter_data($_POST["password"]);
       $confirm_password = filter_data($_POST["confirm-password"]);
+      //$interest = ($_POST["user_interests[]"]);
     if ($password == $confirm_password){
-        $db = get_db_connection();
-      $sql = "INSERT INTO user (firstname, lastname, email, password) VALUES ('$firstname', '$lastname', '$email', '$password');";
-        echo $sql;
-    if(mysqli_query($db, $sql)){
+        $result = register($firstname, $lastname, $email, $password);
+echo $result;
+        if($result != 0){
         $success = true;
         $success_msg = "Du hast dich erfolgreich registriert.</br>";
         $success_msg = "Bitte logge dich jetzt ein.</br>";
+
+        $user_id = $result;
+
+        if(!empty($_POST["user_interests"])){
+          $interest = ($_POST["user_interests"]);
+          $result = add_interests($user_id, $_POST["user_interests"]);
+        }
+
       }else {
         $error = true;
         $error_msg .= "</br>";
@@ -65,7 +73,19 @@ if(isset($_POST["login-submit"])){
         $error = true;
         $error_msg .= "Bitte füllen Sie beide Felder aus.</br>";
       }
+
   }
+
+ /*if($row_count == 1) {
+    $user = mysqli_fetch_assoc($result);
+    session_start();
+    $_SESSION["id"] = $user["user_id"];
+    header("Location:home.php");
+  }
+  $user_interests = add_interests();*/
+
+  $interest_list = get_interests();
+
 ?>
 
 
@@ -125,8 +145,9 @@ if(isset($_POST["login-submit"])){
   										</div>
   									</div>
   								</form>
-  								<!-- /Login-Formular -->
-                  <!-- /Registrierungs-Formular -->
+  						<!-- /Login-Formular -->
+
+              <!-- /Registrierungs-Formular -->
   								<form id="register-form" action="index.php" method="post" role="form" style="display: none;">
   									<div class="form-group">
                       <!-- Feld 1 - Vorname -->
@@ -150,53 +171,15 @@ if(isset($_POST["login-submit"])){
   									</div>
                     <!-- Checkboxen Interessen -->
                     <!-- Checkbox Interesse 1-->
+
+            <?php while($interest = mysqli_fetch_assoc($interest_list)) { ?>
                     <label class="custom-control custom-checkbox">
-                      <input type="checkbox" class="custom-control-input" value="future">
+                      <input type="checkbox" class="custom-control-input" name="user_interests[]" value="<?php echo $interest['interest-id'];?>">
                         <span class="custom-control-indicator"></span>
-                        <span class="custom-control-description">Zukunft</span>
+                        <span class="custom-control-description"><?php echo $interest['interest-title'];?></span>
                     </label>
                   </br>
-                    <!-- Checkbox Interesse 2 -->
-                    <label class="custom-control custom-checkbox">
-                      <input type="checkbox" class="custom-control-input" value="events">
-                        <span class="custom-control-indicator"></span>
-                        <span class="custom-control-description">Veranstaltungen</span>
-                    </label>
-                  </br>
-                    <!-- Checkbox Interesse 3 -->
-                    <label class="custom-control custom-checkbox">
-                      <input type="checkbox" class="custom-control-input" value="history">
-                        <span class="custom-control-indicator"></span>
-                        <span class="custom-control-description">Geschichte</span>
-                    </label>
-                  </br>
-                    <!-- Chechbox Interesse 4 -->
-                    <label class="custom-control custom-checkbox">
-                      <input type="checkbox" class="custom-control-input" value="news">
-                        <span class="custom-control-indicator"></span>
-                        <span class="custom-control-description">News</span>
-                    </label>
-                  </br>
-                    <!-- Chechbox Interesse 5 -->
-                    <label class="custom-control custom-checkbox">
-                      <input type="checkbox" class="custom-control-input" value="projectsun">
-                        <span class="custom-control-indicator"></span>
-                        <span class="custom-control-description">Bauprojekt SUN</span>
-                    </label>
-                  </br>
-                    <!-- Chechbox Interesse 6 -->
-                    <label class="custom-control custom-checkbox">
-                      <input type="checkbox" class="custom-control-input" value="projectkidsstation">
-                        <span class="custom-control-indicator"></span>
-                        <span class="custom-control-description">Bauprojekt Kinderstation</span>
-                    </label>
-                  </br>
-                    <!-- Checkbox Interesse 7 -->
-                    <label class="custom-control custom-checkbox">
-                      <input type="checkbox" class="custom-control-input" value="doctor">
-                        <span class="custom-control-indicator"></span>
-                        <span class="custom-control-description">Eine Ärztin erzählt</span>
-                    </label>
+            <?php } ?>
 
                     <!-- Button registrieren -->
   									<div class="form-group">
