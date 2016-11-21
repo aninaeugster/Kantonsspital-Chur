@@ -3,7 +3,7 @@ session_start();
   if(isset($_SESSION["id"]))  unset($_SESSION["id"]);
     session_destroy();
 
-    require_once("data.php");
+    require_once("db.php");
     require_once("security.php");
 
 $error = false;
