@@ -1,18 +1,18 @@
 <?php
 session_start();
   if(!isset($_SESSION['id'])){
-  //  header("Location:index.php");
+    header("Location:index.php");
   }else{
     $user_id = $_SESSION['id'];
   }
 
-  require_once("data.php");
+  require_once("db.php");
   $result = get_user_by_id($user_id);
   $user = mysqli_fetch_assoc($result);
-    echo $user['firstname'];
-
+  $interest_relations = get_interest($interest_id);
 
  ?>
+
 
 <!-- HTML-Code -->
 <!DOCTYPE html>
@@ -25,7 +25,7 @@ session_start();
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Kantonsspital Chur - Login</title>
+    <title>Kantonsspital Graubünden - Login</title>
 
     <!-- Bootstrap core CSS -->
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
@@ -43,7 +43,7 @@ session_start();
   					<div class="panel-heading">
   						<div class="row">
   							<div class="col-xs-12">
-    							<h3>Kantonsspital Chur</h3>
+    							<h3>Kantonsspital Graubünden</h3>
   							</div>
   						</div>
   						<hr>
@@ -55,14 +55,17 @@ session_start();
   							<div class="col-lg-12">
   								<form id="edit-profile" action="profile.php" method="post" role="form" style="">
                     <div class="input-group">
-                          <input type="text" class="form-control" placeholder="Vorname" aria-describedby="basic-addon1">
+                          <input type="text" class="form-control" placeholder="Vorname" aria-describedby="basic-addon1"
+                          value="<?php echo $user['firstname']; ?>" >
                         </div>
 
                     <div class="input-group">
-                          <input type="text" class="form-control" placeholder="Nachname" aria-describedby="basic-addon1">
+                          <input type="text" class="form-control" placeholder="Nachname" aria-describedby="basic-addon1"
+                          value="<?php echo $user['lastname']; ?>" >
                         </div>
                       <div class="input-group">
-                          <input type="text" class="form-control" placeholder="E-Mail" aria-describedby="basic-addon1">
+                          <input type="text" class="form-control" placeholder="E-Mail" aria-describedby="basic-addon1"
+                          value="<?php echo $user['email']; ?>" >
                         </div>
                       <div class="input-group">
                           <input type="text" class="form-control" placeholder="Passwort" aria-describedby="basic-addon1">
@@ -74,7 +77,8 @@ session_start();
                         <!-- Checkboxen Interessen -->
                         <!-- Checkbox Interesse 1-->
                         <label class="custom-control custom-checkbox">
-                          <input type="checkbox" class="custom-control-input" value="future">
+                          <input type="checkbox" class="custom-control-input" value="future" selected
+                              <?php if($interest_relations[´interest-id´]) ?>
                             <span class="custom-control-indicator"></span>
                             <span class="custom-control-description">Zukunft</span>
                         </label>
@@ -125,7 +129,11 @@ session_start();
                   <div class="panel-body">
                     <div class="row">
                       <div class="col-lg-12">
-                        <input type="submit" name="login-submit" id="login-submit" value="Speichern">
+                        <input type="submit" name=´update-submit´ id=´update-submit´ value="Änderungen speichern">
+
+
+
+
                       </div>
                     </div>
                   </div>
