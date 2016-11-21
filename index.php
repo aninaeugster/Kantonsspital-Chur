@@ -48,7 +48,7 @@ $db = get_db_connection();
     if ($password == $confirm_password){
         $result = register($firstname, $lastname, $email, $password);
 echo $result;
-        if($result != 0){
+        if($result){
         $success = true;
         $success_msg = "Du hast dich erfolgreich registriert.</br>";
         $success_msg = "Bitte logge dich jetzt ein.</br>";
